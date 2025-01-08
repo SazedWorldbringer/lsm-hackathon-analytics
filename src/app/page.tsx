@@ -4,6 +4,7 @@ import Header from "./_components/header";
 import Hero from "./_components/hero";
 import Footer from "./_components/footer";
 import Chat from "./_components/chat";
+import AnalyticsDashboard from "./_components/analytics";
 
 export default async function Home() {
 
@@ -12,6 +13,7 @@ export default async function Home() {
       <main className="min-h-screen bg-white text-black">
         <Header />
         <Hero />
+        <AnalyticsDashboard />
         <Chat />
         <Footer />
       </main>
