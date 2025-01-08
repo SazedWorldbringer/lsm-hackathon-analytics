@@ -7,43 +7,51 @@ import { ScrollArea } from "~/components/ui/scroll-area"
 import { Button } from '~/components/ui/button'
 import { api } from '~/trpc/react'
 
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+
+type Message = {
+  role: "user" | "system";
+  content: string
+}
+
 const Chat = () => {
-  const [messages, setMessages] = useState([
-    { role: 'system', content: 'Hello! I\'m a RAG-powered AI assistant. How can I help you?' }
+  const [messages, setMessages] = useState<Message[]>([
+    { role: "system", content: "Hello! I\"m a RAG-powered AI assistant. How can I help you?" }
   ])
   const [input, setInput] = useState('')
 
-  // const mutation = api.chat.sendMessage.useMutation({
-  //   onSuccess: (data) => {
-  //     setMessages((prev) => [
-  //       ...prev,
-  //       { role: "assistant", content: data.message },
-  //     ]);
-  //   },
-  // });
-  //
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (!input.trim() || mutation.isPending) return;
-  //
-  //   const userMessage = input;
-  //   setInput("");
-  //   setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
-  //
-  //   await mutation.mutateAsync({ message: userMessage });
-  // };
+  const mutation = api.chat.sendMessage.useMutation({
+    onSuccess: (data) => {
+      setMessages((prev) => [
+        ...prev,
+        { role: "system", content: data.message },
+      ]);
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (input.trim()) {
-      setMessages([...messages, { role: 'user', content: input }])
-      // simulate response
-      setTimeout(() => {
-        setMessages(prev => [...prev, { role: 'system', content: 'This is a simulated response from the RAG model. In a real application, this would be generated based on the retrieved information and the user\'s query.' }])
-      }, 1000)
-      setInput('')
-    }
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || mutation.isPending) return;
+
+    const userMessage = input;
+    setInput("");
+    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+
+    await mutation.mutateAsync({ message: userMessage });
+  };
+
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   if (input.trim()) {
+  //     setMessages([...messages, { role: 'user', content: input }])
+  //     // simulate response
+  //     setTimeout(() => {
+  //       setMessages(prev => [...prev, { role: 'system', content: 'This is a simulated response from the RAG model. In a real application, this would be generated based on the retrieved information and the user\'s query.' }])
+  //     }, 1000)
+  //     setInput('')
+  //   }
+  // }
 
   return (
     <section id="chat" className="py-20 px-4">
@@ -59,7 +67,13 @@ const Chat = () => {
               {messages.map((message, index) => (
                 <div key={index} className={`mb-4 ${message.role === 'user' ? 'text-right' : 'text-left'}`}>
                   <span className={`inline-block p-2 ${message.role === 'user' ? 'bg-gray-100 text-black' : 'bg-gray-200 text-black'}`}>
-                    {message.content}
+                    {message.role === 'system' ? (
+                      <ReactMarkdown rehypePlugins={[remarkGfm]} >
+                        {message.content}
+                      </ReactMarkdown>
+                    ) : (
+                      message.content
+                    )}
                   </span>
                 </div>
               ))}
