@@ -18,7 +18,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body className={cn(spaceMono.className, "bg-white text-black")}>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
