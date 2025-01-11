@@ -1,4 +1,4 @@
-import { LangflowResponse, LangflowError, LangflowTweaks, StreamCallbacks } from '~/types/langflow';
+import type { LangflowResponse, LangflowError, LangflowTweaks, StreamCallbacks } from '~/types/langflow';
 
 export class LangflowClient {
   private baseURL: string;
