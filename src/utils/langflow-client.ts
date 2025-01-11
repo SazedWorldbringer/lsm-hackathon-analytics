@@ -1,8 +1,8 @@
 import type { LangflowResponse, LangflowError, LangflowTweaks, StreamCallbacks } from '~/types/langflow';
 
 export class LangflowClient {
-  private baseURL: string;
-  private applicationToken: string;
+  private baseURL;
+  private applicationToken;
 
   constructor(baseURL: string, applicationToken: string) {
     this.baseURL = baseURL;
@@ -73,7 +73,9 @@ export class LangflowClient {
     eventSource.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        onUpdate?.(data);
+        if (typeof data === 'object' && data != null) {
+          onUpdate?.({ chunk: String(data.chunk ?? '') });
+        }
       } catch (error) {
         console.error('Error parsing stream data:', error);
         onError?.('Error parsing stream data');
