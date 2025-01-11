@@ -23,7 +23,7 @@ async function analyzeSocialMediaData() {
       // Skip header row if present
       const rows = doc.content.split('\n').filter((row: string) => row.trim() && !row.startsWith('post_id'));
 
-      return rows.map((row) => {
+      return rows.map((row: { split: (arg0: string) => [string, string, string, string, string, string]; }) => {
         const [post_id, post_type, likes, shares, comments, timestamp] = row.split(',');
         return {
           post_id,
