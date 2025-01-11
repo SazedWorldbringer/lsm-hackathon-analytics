@@ -85,7 +85,9 @@ const Chat = () => {
                 placeholder="Type your message..."
                 className="flex-grow bg-white border-gray-300 text-black placeholder-gray-400 rounded-none"
               />
-              <Button type="submit" variant="outline" className="rounded-none border-black text-black hover:bg-black hover:text-white">Send</Button>
+              <Button type="submit" variant="outline" className="rounded-none border-black text-black hover:bg-black hover:text-white">
+                {mutation.isPending ? "Sending..." : "Send"}
+              </Button>
             </form>
           </CardContent>
         </Card>
