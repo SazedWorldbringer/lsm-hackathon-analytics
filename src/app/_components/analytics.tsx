@@ -3,10 +3,50 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LineChart, Line } from 'recharts'
 import { api } from "~/trpc/react"
+import { Post } from "~/utils/astradb-connection"
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28']
 
-const PostTypeDistribution = ({ analytics }: { analytics: any }) => {
+type Analytics = {
+  totalPosts: number;
+  postTypeBreakdown: {
+    reels: number;
+    carousels: number;
+    static: number;
+  };
+  engagement: {
+    totalLikes: number;
+    totalShares: number;
+    totalComments: number;
+    avgLikesPerPost: number;
+    avgSharesPerPost: number;
+    avgCommentsPerPost: number;
+  };
+  performanceByType: {
+    reel: {
+      avgLikes: number;
+      avgShares: number;
+      avgComments: number;
+    };
+    carousel: {
+      avgLikes: number;
+      avgShares: number;
+      avgComments: number;
+    };
+    static: {
+      avgLikes: number;
+      avgShares: number;
+      avgComments: number;
+    };
+  };
+  topPosts: {
+    byLikes: Post[];
+    byShares: Post[];
+    byComments: Post[];
+  };
+};
+
+const PostTypeDistribution = ({ analytics }: { analytics: Analytics }) => {
   const pieData = Object.entries(analytics.postTypeBreakdown || {}).map(([name, value]) => ({ name, value }))
 
   return (
@@ -32,7 +72,7 @@ const PostTypeDistribution = ({ analytics }: { analytics: any }) => {
   )
 }
 
-const EngagementMetrics = ({ analytics }: { analytics: any }) => {
+const EngagementMetrics = ({ analytics }: { analytics: Analytics }) => {
   if (!analytics.engagement) {
     return <p>No engagement data available</p>;
   }
@@ -56,7 +96,7 @@ const EngagementMetrics = ({ analytics }: { analytics: any }) => {
   )
 }
 
-const PerformanceByType = ({ analytics }: { analytics: any }) => {
+const PerformanceByType = ({ analytics }: { analytics: Analytics }) => {
   const performanceData = Object.entries(analytics.performanceByType).map(([type, metrics]) => ({
     type,
     ...metrics!,
@@ -87,7 +127,7 @@ export default function AnalyticsDashboard() {
     )
   }
 
-  const { allPosts, analytics } = mutation.data
+  const { analytics } = mutation.data
 
   return (
     <div className="container mx-auto p-4">
@@ -124,4 +164,3 @@ export default function AnalyticsDashboard() {
     </div>
   )
 }
-
