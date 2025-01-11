@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
-import { ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LineChart, Line } from 'recharts'
+import { ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts'
 import { api } from "~/trpc/react"
 import { Post } from "~/utils/astradb-connection"
 
@@ -62,7 +62,7 @@ const PostTypeDistribution = ({ analytics }: { analytics: Analytics }) => {
           dataKey="value"
           label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
         >
-          {pieData.map((entry, index) => (
+          {pieData.map((_, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
