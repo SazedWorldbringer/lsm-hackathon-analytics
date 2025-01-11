@@ -10,7 +10,7 @@ const PostTypeDistribution = ({ analytics }: { analytics: any }) => {
   const pieData = Object.entries(analytics.postTypeBreakdown || {}).map(([name, value]) => ({ name, value }))
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={350}>
       <PieChart>
         <Pie
           data={pieData}
@@ -44,7 +44,7 @@ const EngagementMetrics = ({ analytics }: { analytics: any }) => {
   ]
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={350}>
       <BarChart data={barData}>
         <XAxis dataKey="name" />
         <YAxis />
@@ -63,7 +63,7 @@ const PerformanceByType = ({ analytics }: { analytics: any }) => {
   }))
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={450}>
       <BarChart data={performanceData}>
         <XAxis dataKey="type" />
         <YAxis />
@@ -93,6 +93,15 @@ export default function AnalyticsDashboard() {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Social Media Analytics Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card className="col-span-2 h-[30">
+          <CardHeader>
+            <CardTitle>Performance by Post Type</CardTitle>
+            <CardDescription>Average engagement metrics for each post type</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <PerformanceByType analytics={analytics} />
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader>
             <CardTitle>Post Type Distribution</CardTitle>
@@ -109,15 +118,6 @@ export default function AnalyticsDashboard() {
           </CardHeader>
           <CardContent>
             <EngagementMetrics analytics={analytics} />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Performance by Post Type</CardTitle>
-            <CardDescription>Average engagement metrics for each post type</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <PerformanceByType analytics={analytics} />
           </CardContent>
         </Card>
       </div>
